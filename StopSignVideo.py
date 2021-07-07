@@ -1,13 +1,11 @@
 import cv2
-import numpy as np
-from matplotlib import pyplot as plt
 
-#Input stopsign data from xml
+#Input stop sign data from xml
 stop_data = cv2.CascadeClassifier('stop_data.xml')
 font = cv2.FONT_HERSHEY_SIMPLEX
 
 #Read in the image
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(1)
 if not cap.isOpened():
     print("Cannot access camera")
     exit()
@@ -20,11 +18,11 @@ while True:
         print("Frame can't be loaded, is the camera off?")
         break
     
-    #Convert the frame to RGB and display it
-    #video = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+    #Convert the frame to gray for sign detection
+    frame_gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
     #Find and label stop signs in the frame
-    findSigns = stop_data.detectMultiScale(frame, minSize =(20,20))
+    findSigns = stop_data.detectMultiScale(frame_gray, minSize =(20,20))
     signsFound = len(findSigns)
     if signsFound != 0:
         for (x,y,width,height) in findSigns:
